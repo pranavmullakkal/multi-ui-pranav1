@@ -13,9 +13,10 @@ public class Control {
         this.ui = null;
         System.out.println("CONTROL ACTIVE");
     }
+    
     public Control(UI ui){
         this.ui = ui;
-        this.g.addPlayer(p);
+        this.g.addPlayer();
     }
 
     public Control(Player p){
@@ -27,11 +28,11 @@ public class Control {
     public void launch(){
     
     }
-
+    
     public State getState(){
         return this.g.getState();
     }
-
+    
     public boolean update(int[] pos, String sId) {
         System.out.println("MAKE UPDATE! " + pos[0] + "|" + pos[1]);
         return g.play(pos, sId);
