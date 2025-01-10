@@ -33,7 +33,7 @@ public class JTile extends JButton implements ActionListener, Locatable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        char bt = c.update( pos,"" );
+        char bt = c.update(pos[0], "" + pos[1]);
         if(bt != ' ') super.setText("" + bt);
     }
 

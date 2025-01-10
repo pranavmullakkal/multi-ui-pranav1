@@ -33,9 +33,10 @@ public class Control {
     }
 
     // pos[0] is X
-    public char update(int[] pos, String sId) {
-        return g.play(pos, sId);
+    public char update(int buttonsToRemove, String sId) {
+        return g.play(buttonsToRemove, sId); // Correct usage
     }
+    
 
     public Player getActive() {
         return g.getActive();
@@ -61,9 +62,10 @@ public class Control {
         return g.getTurn();
     }
 
-    public Location getLocation(int x, int y){
-        return g.getLocation(x,y);
+    public Location getLocation(int x, int y) {
+        return ((World) g.getState()).getLocation(x, y); // Assuming g.getState() returns a World instance
     }
+    
 
     public String[][] getTerrainStrings() {
 

@@ -2,51 +2,65 @@ package edu.bothell.multi_ui.core;
 
 import java.util.ArrayList;
 
-
 public class Game {
-    private final int                  MAX_PLAYERS = 3;
-    private final ArrayList<Player>    p;
-    private final State                s;
-    private int                        turn;
-    private Player                     active;
+    private final int MAX_PLAYERS = 2; // Nim is typically played with 2 players
+    private final ArrayList<Player> players;
+    private final State state;
+    private int turn;
+    private Player active;
+    private int buttonsRemaining; // Number of buttons remaining
 
-    public Game(Control c){
+    public Game(Control c) {
         this.turn = 0;
-        this.s = new World();
-        this.p = new ArrayList<>();
+        this.state = new World(); // Assuming World is your game state representation
+        this.players = new ArrayList<>();
+        this.buttonsRemaining = 16; // Start with 16 buttons
     }
-    
-    public Player addPlayer(Player p){
-        this.p.add(p);
-        if(this.active == null) active = p;
 
+    public Player addPlayer(Player p) {
+        if (players.size() < MAX_PLAYERS) {
+            this.players.add(p);
+            if (this.active == null) active = p;
+        }
         return p;
     }
 
-    public Player addPlayer(char c, String sId){
+    public Player addPlayer(char c, String sId) {
         Player p = new Player(c);
         p.setSId(sId);
         return addPlayer(p);
     }
 
-    public char[] getPlayersChar(){
-        char[] pcs = new char[p.size()];
-        for(int i = 0; i < pcs.length; i++) 
-            pcs[i] = p.get(i).getChar();
-        
+    public char[] getPlayersChar() {
+        char[] pcs = new char[players.size()];
+        for (int i = 0; i < pcs.length; i++)
+            pcs[i] = players.get(i).getChar();
         return pcs;
     }
-    
-    public boolean isValid(int[] pos, String sId){
-        System.out.println("isVAlid?"+s.getIt(pos)+"|" + sId+"|" + active.getSId()+"|");
-        return s.isOpen(pos) && active.getSId().equals(sId);
+
+    public boolean isValid(int buttonsToRemove, String sId) {
+        // Check if the move is valid
+        return (buttonsToRemove == 1 || buttonsToRemove == 2) && 
+               buttonsToRemove <= buttonsRemaining && 
+               active.getSId().equals(sId);
     }
 
-    public char play(int[] pos, String sId){
-        if(!isValid(pos, sId)) return ' ';
+    public char play(int buttonsToRemove, String sId) {
+        if (!isValid(buttonsToRemove, sId)) return ' ';
+        
+        // Update the number of buttons remaining
+        buttonsRemaining -= buttonsToRemove;
+
+        // Check if the game is over
+        if (buttonsRemaining == 0) {
+            // The current player loses
+            System.out.println(active.getChar() + " loses!");
+            return 'L'; // Indicate loss
+        }
+
+        // Switch to the next player
         turn++;
-        this.s.setIt(active.getChar(), pos[0], pos[1]);
-        this.active = p.get( turn % p.size() );
+        this.active = players.get(turn % players.size());
 
         return active.getChar();
     }
@@ -56,11 +70,7 @@ public class Game {
     }
 
     public State getState() {
-        return this.s;
-    }
-
-    public Location getLocation(int x, int y) {
-        return ((World)s).getLocation(x, y);
+        return this.state;
     }
 
     public int getMaxPlayers() {
@@ -68,16 +78,18 @@ public class Game {
     }
 
     public int getPlayerCount() {
-        return p.size();
+        return players.size();
     }
 
-    public ArrayList<Player> getPlayers(){
-        return this.p;
+    public ArrayList<Player> getPlayers() {
+        return this.players;
     }
 
-    public int getTurn(){
+    public int getTurn() {
         return this.turn;
     }
 
-
+    public int getButtonsRemaining() {
+        return buttonsRemaining;
+    }
 }

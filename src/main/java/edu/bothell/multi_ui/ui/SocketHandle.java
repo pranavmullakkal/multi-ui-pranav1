@@ -88,13 +88,12 @@ public class SocketHandle extends TextWebSocketHandler {
             int y = Integer.parseInt(coords[1]);
 
             // Update the game state in Control
-            c.update(new int[]{x, y}, session.getId());
+            c.update(x, session.getId());
 
             // Broadcast the updated game state
             broadcastGameState();
         }
     }
-
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {

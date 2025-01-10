@@ -66,13 +66,21 @@ public class PostControl {
         if(die != null){
 
         }
-        if(pos != null){
+        if (pos != null) {
             String p[] = pos.split(",");
             int x = Integer.parseInt(p[0]);
             int y = Integer.parseInt(p[1]);
-            this.c.update( new int[]{x,y}, s.getId() );
-            System.out.println( "---------" + c.checkConnected(x, y) );
+        
+            // Determine how many buttons to remove (1 or 2)
+            int buttonsToRemove = 1; // or 2, based on your game logic
+        
+            // Call the update method with the correct parameters
+            this.c.update(buttonsToRemove, s.getId());
+        
+            // Check connected locations (if applicable)
+            System.out.println("---------" + c.checkConnected(x, y));
         }
+        
         return "redirect:/game";
     }
     
